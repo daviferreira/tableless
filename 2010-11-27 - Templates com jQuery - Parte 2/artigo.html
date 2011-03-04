@@ -1,0 +1,66 @@
+<p>Agora que você já sabe como implementar templates em suas aplicações javascript/jQuery, chegou a hora de conhecer técnicas avançadas e melhorias nessa implementação.</p>
+
+<p>Na primeira parte deste artigo você conferiu uma introdução ao novo plugin .tmpl() que possibilita a utilização de templates para retornos e saídas de suas aplicações jQuery. O plugin certamente é um avanço considerável na organização de código - é o JavaScript ficando cada vez mais profissional e robusto, abandonando a fama de ser uma simples linguagem de script, sem padrões.</p>
+
+<p>A forma mais básica de utilização do plugin .tmpl() é declarar seu template em uma variável e chamá-lo da seguinte forma:</p>
+
+<pre lang="javascript">
+var noticias = [
+	{
+		titulo : 'Notícia 1',
+		data_publicacao : '28/10/2010 20h31',
+		chamada : 'Chamada da notícia 1',
+		link : '/noticia-1/',
+	},
+	{
+		titulo : 'Notícia 2',
+		data_publicacao : '28/10/2010 20h32',
+		chamada : 'Chamada da notícia 2',
+		link : '/noticia-2/',
+	},
+	{
+		titulo : 'Notícia 3',
+		data_publicacao : '28/10/2010 20h33',
+		chamada : 'Chamada da notícia 3',
+		link : '/noticia-3/',
+	}
+];
+
+var tpl_noticia = '<li><h3>${titulo}</h3><span class="data">${data_publicacao}</span><span>${chamada}</span><span><a href="${link}">Veja mais</a></span></li>';
+
+$.tmpl( tpl_noticia, noticias ).appendTo( 'ul#noticias' );
+</pre>
+
+<p>Um problema do exemplo acima é que o template acaba ficando confuso dentro de uma varável. Uma outra forma de declarar um modelo seria utilizando a própria tag script, mas com um tipo diferente (text/x-jquery-tmpl):</p>	
+
+<pre lang="javascript">
+<script id="tpl-noticia" type="text/x-jquery-tmpl">
+    <li>
+		<h3>${titulo}</h3>
+		<span class="data">${data}</span>
+		<p class="chamada">${chamada}</p>
+		<a href="${link}">Leia mais</a>
+	</li>
+</script>
+</pre>
+
+<p>Dessa forma é possível indentar o template HTML obtendo uma melhor organização/visualização do código.</p>
+
+<h2>Caching</h2>
+
+<p>Antes de um teplate ser retornado através do método .tmpl(), ele é tranformado em uma função e depois executado. Uma forma de evitar esta execução toda vez que for retornado o plugin é utilizar o método .template() para criar uma versão em cache, otimizando a performance do script.</p>
+	
+<pre lang="javascript">
+// renderizando como plugin diretamente no objeto jQuery
+$('#tpl-noticia').template('tplNoticia');
+
+// associando diretamente a uma variável
+var tplNoticia = $('#tpl-noticia').template();
+
+// renderizando passando html/texto como parâmetro
+$.template('tplNoticia', '<li>${titulo}</li>');
+</pre>	
+
+<h2>{{wrap}}</h2>
+
+<h2>{{tmpl}}</h2>

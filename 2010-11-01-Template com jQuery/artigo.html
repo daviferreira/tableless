@@ -1,0 +1,117 @@
+      <p>Na dieta diária do desenvolvedor front-end sempre esteve presente uma saladinha de HTML com JavaScript. Principalmente quando precisamos implementar um código com funcionalidades AJAX. Por exemplo, imagine que o bloco abaixo representa o retorno de um getJSON() da vida:</p>
+      
+<pre lang="javascript">for( i in noticias )
+{
+	html = '<li><h3>' + noticias[i]['titulo'] + '</h3>';
+	html += '<span class="data">' + noticias[i]['data_publicacao'] + '</span>';
+	html += '<span>' + noticias[i]['chamada'] + '</span>';
+	html += '<span><a href="' + link + '">Veja mais</a></span></li>';
+}
+$('#noticias').append( html );</pre>
+  
+      <p>O problema do código acima é que ele é pouco reutilizável e de baixa legibilidade, além de ser muito chato de digitar e prestar manutenção, com todas as concatenações e índices. Foi pensando nisso que o pessoal da Microsoft desenvolveu o plugin <a href="http://github.com/jquery/jquery-tmpl" rel="external" title="jQuery.tmpl() no GitHub">jQuery.tmpl()</a> (tmpl de template, é claro), aceito recentemente na <a href="http://api.jquery.com/jquery.tmpl/" rel="external" title="Página do plugin jQuery.tmpl() na documentação oficial do jQuery">API oficial do jQuery</a>.</p>
+ 
+	<p>Mas não confunda template com separar o JavaScript do HTML no sentido "físico" da coisa (colocando tudo que é JS em arquivos externos, outra boa prática para desenvolvedores). Neste texto você aprende a utilizar blocos de código HTML nas suas interações via jQuery, substituindo variáveis por conteúdos de saída/retorno.</p>
+     
+      <h2>Definindo seu template</h2>
+      
+      <p>Quem já trabalhou ou já viu algum tipo de implementação de templates não vai ter muitas dificuldades para se adaptar à forma de templating do jQuery. O conceito básico é definir um modelo padrão para um bloco de código e trabalhar com substituição de variáveis. O template do bloco mostrado anteriormente seria o seguinte:</p>
+      
+<pre lang="javascript">var tpl_noticia = '<li><h3>${titulo}</h3><span class="data">${data_publicacao}</span><span>${chamada}</span><span><a href="${link}">Veja mais</a></span></li>';</pre>
+
+<p>Abaixo você confere uma chamada simples para nosso template. (Note que os dados de exemplo estão armazenados em um objeto JSON.)</p>
+
+<pre lang="javascript">var noticias = [
+	{
+		titulo : 'Notícia 1',
+		data_publicacao : '28/10/2010 20h31',
+		chamada : 'Chamada da notícia 1',
+		link : '/noticia-1/',
+	},
+	{
+		titulo : 'Notícia 2',
+		data_publicacao : '28/10/2010 20h32',
+		chamada : 'Chamada da notícia 2',
+		link : '/noticia-2/',
+	},
+	{
+		titulo : 'Notícia 3',
+		data_publicacao : '28/10/2010 20h33',
+		chamada : 'Chamada da notícia 3',
+		link : '/noticia-3/',
+	}
+];
+
+$(function(){
+	// aplica o template tpl_noticias aos dados e adiciona a lista ao elemento ul
+	$.tmpl( tpl_noticia, noticias ).appendTo( 'ul#noticias' );
+});</pre>
+
+<p>Além do .appendTo(), você pode ainda utilizar os seguintes métodos para trabalhar co templates: .prependTo(), .insertAfter() e .insertBefore().</p>
+
+      <h2>Tipos de dados</h2>
+      
+		<p>
+			<strong>${var}</strong>
+			<br />Provavelmente a que você vai utilizar com mais frequência. Representa variáveis ou expressões JavaScript, é um atalho para {= expr/var}.
+			
+			<pre lang="javascript">var tpl = '<li>${nome}</li>';
+				
+// exemplo de expressão
+var tpl = '<p class="">${formataData( data_publicacao )}</p>';
+
+var formataData = function( sdata )
+{
+	var meses = { 
+		1 : 'Janeiro', 2 : 'Fevereiro', 3 : 'Março', 4 : 'Abril', 
+		5 : 'Maio', 6 : 'Junho', 7 : 'Julho', 8 : 'Agosto', 9 : 'Setembro', 
+		10 : 'Outubro', 11 : 'Novembro', 12 : 'Dezembro' 
+	};
+	var mes = parseInt( sdata.substr( 3, 2 ), 10 );
+	var dia = sdata.substr( 0, 2 );
+	var ano = sdata.substr( 6, 4 );
+	return dia + ' de ' + meses[mes] + ' de ' + ano;
+};</pre>
+			
+		</p>
+		<p>
+			<strong>{{each}}{{/each}}</strong>
+			<br />Define um loop entre elementos de um array ou objeto javascript, dentro do escopo do template. Assim como a tag para expressões, também aceita métodos para tratar o valor. Suas variáveis internas são $index e $value (chave e valor do array/objeto, respectivamente).
+<pre lang="javascript">var tpl_artigo = '<p><h3>${titulo}</h3>{{each autores}}${$value.toUpperCase()}<br />{{/each}}</p>';
+
+var artigos = [
+    { 
+		titulo: 'Javascript &amp; Acessibilidade', 
+		autores: ['Davi Ferreira', 'Letícia Stallone'],
+		abstract: '<strong>Acessibilidade e Javascript</strong>',
+		},
+    { 
+		titulo: 'Humor no Javascript', 
+		autores: ['Letícia Stallone'],
+		abstract: '<strong>Javascript pode ser bem engraçado</strong>',
+	},
+    { 
+		titulo: 'Boas práticas', 
+		autores: '',
+		abstract: '<strong>Boas práticas de desenvolvimento web</strong>',
+	}
+];</pre>
+		</p>
+		<p>
+			<strong>{{if}}{{else}}{{/if}}</strong>
+			<br />Implementa condicionais dentro do template. Executa (ou não) uma determinada condição, baseada no valor/retorno da variável/expressão. Esta tag interpreta como <em>false</em> qualquer valor nulo, 0 ou <em>undefined</em>.
+<pre lang="javascript">var tpl_artigo = '<li><h3>${titulo}</h3>{{if autores.length}}Autor(es): {{else}}sem autor cadastrado{{/if}}{{each autores}}${$value.toUpperCase()}<br />{{/each}}</li>';</pre>
+		</p>
+		<p>
+			<strong>{{html}}</strong>
+			<br />Caso você tente dar a saída no template de um conteúdo com tags HTML o jquery.tmpl() vai transformar as marcações em texto puro. Para que a saída aconteça também em HTML é necessário utilizar a tag especial {{html}}.
+			<br />
+<pre lang="javascript">var tpl_artigo = '<li><h3>${titulo}</h3>{{if autores.length}}Autor(es): {{else}}sem autor cadastrado{{/if}}{{each autores}}${$value.toUpperCase()}<br />{{/each}}{{html abstract}}</li>';</pre>
+
+		</p>
+
+	<p>Deu pra perceber a potencialidade deste plugin para aplicações mais elaboradas, com diversas interações via AJAX? Você pode ter um .js só para seus modelos e parar de concatenar tudo e todos diretamente no código. As tags são bastante flexíveis, permitindo tanto variáveis simples como expressões mais avançadas.</p>
+	
+	<p>Na parte 2 deste artigo veremos como implementar os templates com caching e ainda as tags avançadas {{wrap}} e {{tmpl}}.</p>
+	
+	<p><a href="http://www.tableless.com.br/wp-content/uploads/2010/11/exemplo.html" rel="external">Clique aqui para ver os exemplos em ação.</a></p>

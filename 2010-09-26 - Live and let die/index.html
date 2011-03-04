@@ -1,0 +1,99 @@
+<!doctype>
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+		<title>Tableless - Eventos dinâmicos</title>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+		<script type="text/javascript" src="jquery.marcaTexto.js"></script>
+		<link rel="stylesheet" href="exemplo.css" media="screen" type="text/css" />
+		<style type="text/css">
+		span.marcaTexto {
+				position: relative;
+				z-index: 180!important;
+				-moz-box-shadow: 0 0 1em #889;
+				-webkit-box-shadow: 0 0 1em #888;
+				box-shadow: 0 0 1em #889;
+				padding: 4px;
+		}
+		</style>
+	</head>
+	<body>
+		<h1>Exemplos</h1>
+		
+		<h2>Dicas rápidas</h2>
+		
+		<div class="demo">
+			<input type="text" name="exemplo" id="exemplo" size="40" />
+		</div>
+
+		<div class="demo">
+			<p><a href="#" class="menu">Menu</a></p>
+			<ul id="menu" style="display:none;">
+				<li><a href="#">menu 1</a></li>
+				<li><a href="#">menu 2</a></li>
+				<li><a href="#">menu 3</a></li>
+				<li><a href="#">menu 4</a></li>
+			</ul>
+		</div>
+
+		<h2>Live and let die</h2>
+
+		<div class="demo">
+			<p><a href="#" class="lnk-confirmar" style="font-weight:900;font-size:18px;">Confirmar!</a></p>
+		</div>
+		
+		<div class="demo">
+			<ul id="lista">
+				<li>Ítem 1 <a href="#" class="add"><img src="add.png" width="16" height="16" alt="adicionar" /></a></li>
+			</ul>
+		</div>
+
+		<script type="text/javascript">
+		$('a.add').live( 'click', function(e){
+			var total = $('ul#lista li').length;
+			$('ul#lista').append('<li>Ítem ' + ( total + 1 ) +'</li>');
+			if( total == 9 ) // armazenamos o total antes de adicionar a última
+			{
+				$('a.add').die( 'click' );
+			}
+			e.preventDefault();
+		});
+		
+		$('a.lnk-confirmar').live('click', function(e){
+		    $('<p><a class="lnk-confirmar">novo</a></p>').insertAfter(this);
+		    alert('Clique');
+		    e.preventDefault();
+		});
+		
+		$(function(){
+			$('input[type="text"]').bind('mouseenter mouseleave', function(){
+				$(this).toggleClass('ativo');
+			});
+
+			
+			$('a.menu').bind({
+				mouseover: function(){
+					$(this).addClass('ativo');
+					$('#menu').slideDown();
+				},
+				mouseout: function(){
+					$(this).removeClass('ativo');
+					$('#menu').slideUp();
+				}
+			});
+		});
+		
+		$('ul').parent().parent().delegate('input[type="text"]', 'hover', function(){
+			$(this).val('Passei aqui!');
+		});
+		
+		/*
+		// NÃO FUNCIONA
+		$('body').children().find('li').live('click', function(){
+			$(this).toggleClass('ativo');
+		});
+		*/
+		
+		</script>
+	</body>
+</html>

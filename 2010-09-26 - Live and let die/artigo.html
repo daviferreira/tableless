@@ -1,0 +1,122 @@
+	<p>No JavaScript, eventos correspondem à qualquer interação do usuário com o navegador. O clássico addEventListener ganhou sua versão no jQuery através do método .bind() ou com seus respectivos métodos (.click(), .focus(), .keyup() etc. ). Da mesma forma, é possível remover/desassociar um evento através do método .unbind(). O assunto eventos é tão rico que merece um outro artigo .</p>
+
+	<p>Neste, vou falar dos métodos .live() e .die() e dos novos .delegate() e .undelegate(). O que eles fazem é trabalhar com esse eventos em elementos criados dinamicamente.</p>
+
+	<h4>Dicas rápidas</h4>
+
+	<p>Antes de começar, vamos a algumas dicas rápidas sobre a associação de eventos no jQuery.</p>
+
+	<p>Por exemplo, você sabia que é possível associar mais de um evento? Basta utilizar o método bind() com os eventos separados por espaço:</p>
+
+	<pre lang="javascript">
+	$('input[type="text"]').bind('mouseenter mouseleave', function(){
+		$(this).toggleClass('ativo');
+	});
+	</pre>
+
+	<p>Ou então, para o caso de funções diferentes:</p>
+
+	<pre lang="javascript">
+	$('a').bind({
+		mouseover: function(){
+			$(this).addClass('ativo');
+			$('#menu').slideDown();
+		},
+		mouseout: function(){
+			$(this).removeClass('ativo');
+			$('#menu').slideUp();
+		}
+	});
+	</pre>
+
+	<p>O exemplo acima pode ser substiuído com o evento personalizado do jQuery, .hover(), que define uma função para o mouseover e outra para o mouseout:</p>
+
+	<pre lang="javascript">
+	$('a').hover({
+		function(){
+			$(this).addClass('ativo');
+			$('#menu').slideDown();
+		},
+		function(){
+	   		$(this).removeClass('ativo');
+	    	$('#menu').slideUp();
+		}
+	});
+	</pre>
+
+	<p>Para uma lista completa de eventos e recursos visite o link <a href="http://api.jquery.com/category/events/">api.jquery.com/category/events/</a>.</p>
+
+	<h4>Live and let die</h4>
+
+	<p>Desde a versão 1.4 do jQuery, graças ao método .live() é possível associar eventos a elementos adicionados dinamicamente em uma página. Toda vez que um novo elemento for criado, o mesmo receberá o evento associado via .live(). Ou seja, o .live() funciona tanto para elementos que já existam no DOM como para aqueles que serão adicionados após o carregamento da página.</p>
+
+	<p>Antes dessa funcionalidade, o link criado no exemplo abaixo não herdaria a propriedade do link que ativou o evento click:</p>
+
+	<pre lang="javascript">
+	$(function(){
+		$('a.lnk-confirmar').click(function(e){
+			$('<a class="lnk-confirmar">novo</a>').insertAfter(this);
+			alert('Clique');
+			e.preventDefault();
+		});
+	});
+	</pre>
+
+	<p>Com o .live() resolvemos este problema, ficando assim:</p>
+
+	<pre lang="javascript">
+	$('a.lnk-confirmar').live('click', function(e){
+	    $('<a class="lnk-confirmar">novo</a>').insertAfter(this);
+	    alert('Clique');
+	    e.preventDefault();
+	});
+	</pre>
+
+	<p>Dessa forma, tanto os elementos já existentes, quanto os criado dinamicamente, receberão a função no evento click. Diferente do método .bind(), não precisamos esperar o DOM estar todo carregado ($(function(){...})).</p>
+
+	<p>E assim como utilizamos o .unbind() para dessassociar eventos anexados via .bind(), temos o .die() como companheiro do .live(). O .die() remove todos ou alguns eventos especificados, anulando qualquer .live() declarado anteriormente.</p>
+
+	<pre lang="javascript">
+	$('a.add').live('click', function(e){
+		var total = $('ul#lista li').length;
+		$('ul#lista').append('<li>Ítem ' + ( total + 1 ) +'</li>');
+		 // armazenamos o total antes de adicionar a última
+		if( total == 9 )
+		{
+			$('a.add').die('click');
+		}
+		e.preventDefault();
+	});
+	</pre>
+
+	<p>O link com a class add vai adicionar ítens à uma lista. Quando o número de ítens for maior do que 10, e evento click é removido do link.</p>
+
+	<p>A partir da versão 1.4.1 do jQuery o método .live() também aceita múltiplos eventos como parâmetro, conforme mostrado anteriormente no .bind().</p>
+
+	<h4>Estendendo a funcionalidade do .live()</h4>
+
+	<p>Um dos problemas do .live() e que foi assunto para muita polêmica é que ele não funciona com encadeamento de métodos, a não ser que esteja no topo. Por exemplo, o código abaixo retorna erro:</p>
+	
+	<pre lang="javascript">
+	$('body').children().find('li').live('click', function(){
+		$(this).toggleClass('ativo');
+	});
+	</pre>
+
+	<p>Encadeamento é uma das principais características do jQuery, e por isso o .live() foi alvo de muitas críticas. Para resolver a situação, a versão 1.4.2 ganhou os métodos .delegate() e .undelegate().</p>
+	
+	<pre lang="javascript">
+	$('ul').parent().parent().delegate('input[type="text"]', 'hover', function(){
+		$(this).val('Passei aqui!');
+	});
+	
+	$('ul').parent().parent().undelegate('input[type="text"]', 'hover');
+	</pre>
+	
+	<p>Note que com o delegate não há problemas com encadeamento. Sua chamada é um pouco diferente, recebendo como primeiro parâmetro o seletor a ser utilizado e depois o evento e sua função/ação.</p>
+	
+	<h4>Qual método utilizar: live ou delegate?</h4>
+	
+	<p>Com a chegada do .delegate() o .live() está, provavelmente, com os dias contados. Seu propósito inicial era bacana, mas o nome foi muito mal escolhido e o fato de não aceitar encadeamento é quase que inadmissível em se tratando de um método jQuery. A tendência é que o .live() passe a ser <em>deprecated</em> nas próximas versões.</p>
+	
+<p><a href="#">Clique aqui para ver os exemplos em ação.</a></p>
