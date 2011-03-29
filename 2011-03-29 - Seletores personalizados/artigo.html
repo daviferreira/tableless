@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+  <head>
+    <title>jQuery - Seletores personalizados</title>
+    <meta charset="utf-8" />
+    <link href="../exemplo.css" media="screen" type="text/css" />
+  </head>
+  <body>
+    <h1>Seletores personalizados com jQuery</h1>
+    
+    <p>Além de ser altamente personalizável através de plugins, o framework jQuery também é bastante flexível com seus seletores. Além de poder localizar objetos e elementos por ID, classe, nome do elemento, atributos etc. também é possível criar o seu próprio seletor.</p>
+    
+    <p></p>
+    
+    <h3>As propriedades de um seletor</h3>
+    
+    <p>O cabeçalho básico de um seletor personalizado segue o modelo abaixo:</p>
+    
+    <pre lang="javascript">
+$.expr[':'].seletor = function(objNode, intStackIndex, arrProperties, arrNodeStack){
+  // código que deve retornar true para incluir o objeto ou false
+};
+    </pre>
+    
+    <p>Através da alta flexibilidade do jQuery estamos estendendo o funcionamento da expressão ":" (que representa muitos seletores) adicionando uma função própria, desenvolvida sob medida para nosso site ou aplicação web.</p>
+    
+    <p>Um seletor personalizado nada mais é do que uma função que retorna true para incluir o elemento na lista ou false para não incluí-lo. Por padrão, a função espera receber quatro parâmetros:</p>
+    
+    <ul>
+      <li><strong>objNode</strong> - trata-se do objeto atual (referente ao elemento no DOM, ou seja, NÃO é um clone) sendo tratado;</li>
+      <li><strong>intStackIndex</strong> - o índice do objeto no conjunto de elementos do seletor. Vamos supor que nosso seletor busque ítens (&lt;li>) de uma lista (&lt;ul>). O primeiro ítem da lista terá o índice 0, o segundo o índice 1 e por aí vai;</li>
+      <li><strong>arrProperties</strong> - esse parâmetro contém informações sobre nosso objeto atual no seletor. Só lidaremos mesmo com a posição 3, que representa o parâmetro passado no seletor, mas vejamos o que cada um representa:
+        <pre lang="javascript">
+meta = [  
+  ':seletor(argumento)',  // o seletor completo
+  'seletor',              // apenas o seletor
+  '',                     // aspas utilizadas nos parâmetros
+  'argumento'             // parâmetros
+]
+        </pre>
+      </li>
+      <li><strong>arrNodeStack</strong> - o array completo, com todos os objetos capturados pelo nosso seletor.</li> 
+    </ul>
+    
+    <h3>Meu primeiro seletor</h3>
+    
+    <p>Hora de colocar a mão na massa. Vamos começar com um seletor bem simples que buscará todos os links da nossa aplicação que possuam "#" como atributo href:</p>
+    
+    <pre lang="javascript">
+$.expr[':'].sem_link = function(obj){
+  return ($(obj).attr('href') == "#");
+};      
+    </pre>
+    
+    <p>Reparem que só utilizamos o primeiro parâmetro, o objeto em si. A função compara o atributo href do elemento com o link "#" e automaticamente retorna true ou false.Veja como utilizaríamos nosso novo seletor:</p>
+    
+    <pre lang="javascript">
+$('a:sem_link').click(function(e){
+  e.preventDefault();
+});  
+    </pre>
+    
+    <h3>Seletor com parâmetros</h3>
+    
+  </body>
+</html>
