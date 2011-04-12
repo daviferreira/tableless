@@ -1,0 +1,41 @@
+<html>
+	<head>
+    <title>jQuery - o fim da paginação</title>
+    <meta charset="utf-8" />
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+	</head>
+  <body>
+    <h1>Tweet, tweet!</h1>
+
+    <ul id="lista-tweets"></ul>
+    <p><a href="#" id="carrega-tweets" data-pagina="1">load more</a></p>
+  
+ <script>
+  $(function(){
+    retorna_tweets(1);
+    $('#carrega-tweets').click(function(e){
+      retorna_tweets($(this).data('pagina'));
+      e.preventDefault();
+    });
+  });
+
+  var retorna_tweets = function(pagina){
+    $('#lista-tweets').append('<li class="carregando">Aguarde, carregando...</li>');
+    var screen_name = 'davitferreira'; // set user name
+    var formato = 'json';
+    var url = 'http://api.twitter.com/1/statuses/user_timeline.'+formato+"?callback=?";
+
+    $.getJSON(url, {screen_name:screen_name, page:pagina}, function(tweets){
+      $('.carregando').fadeOut(function(){
+        for(x in tweets)
+          $('#lista-tweets').append('<li>'+tweets[x].text+'</li>');
+        $(this).remove();
+      });
+      $('#carrega-tweets').data('pagina', pagina + 1);
+    });
+  };
+
+  </script>
+
+  </body>
+</html>

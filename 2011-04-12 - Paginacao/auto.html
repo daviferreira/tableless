@@ -1,0 +1,57 @@
+<html>
+	<head>
+    <title>jQuery - o fim da paginação</title>
+    <meta charset="utf-8" />
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+    <style>
+      #lista-tweets li{padding:20px;margin:10px}
+    </style>
+	</head>
+  <body>
+    <h1>Tweet, tweet!</h1>
+
+    <ul id="lista-tweets"></ul>
+  
+ <script>
+  var timerScroll = "";
+  $(function(){
+
+    retorna_tweets(1);
+
+    $('body').data('pagina', 1);
+
+    inicializa_scroll();
+
+  });
+
+  var inicializa_scroll = function(){
+    $(window).scroll(function() {
+      if($(window).scrollTop() + $(window).height() == $(document).height()) {
+        $(window).unbind('scroll');
+        retorna_tweets($('body').data('pagina'));
+      }
+    });
+  };
+
+  var retorna_tweets = function(pagina){
+    $('#lista-tweets').append('<li class="carregando">Aguarde, carregando...</li>');
+
+    var screen_name = 'davitferreira';
+    var url = 'http://api.twitter.com/1/statuses/user_timeline.json?callback=?';
+    
+    $('body').data('pagina', pagina + 1);
+
+    $.getJSON(url, {screen_name:screen_name, page:pagina}, function(tweets){
+      $('.carregando').fadeOut(function(){
+        for(x in tweets)
+          $('#lista-tweets').append('<li>'+tweets[x].text+'</li>');
+        $(this).remove();
+        inicializa_scroll();
+      });
+    });
+  };
+
+  </script>
+
+  </body>
+</html>
