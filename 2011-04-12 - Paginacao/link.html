@@ -1,41 +1,42 @@
 <html>
 	<head>
-    <title>jQuery - o fim da paginação</title>
+    <title>jQuery - conteúdo on demand</title>
     <meta charset="utf-8" />
+    <link rel="stylesheet" href="tableless.css" />
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
 	</head>
   <body>
-    <h1>Tweet, tweet!</h1>
-
-    <ul id="lista-tweets"></ul>
-    <p><a href="#" id="carrega-tweets" data-pagina="1">load more</a></p>
-  
- <script>
-  $(function(){
-    retorna_tweets(1);
-    $('#carrega-tweets').click(function(e){
-      retorna_tweets($(this).data('pagina'));
-      e.preventDefault();
-    });
-  });
-
-  var retorna_tweets = function(pagina){
-    $('#lista-tweets').append('<li class="carregando">Aguarde, carregando...</li>');
-    var screen_name = 'davitferreira'; // set user name
-    var formato = 'json';
-    var url = 'http://api.twitter.com/1/statuses/user_timeline.'+formato+"?callback=?";
-
-    $.getJSON(url, {screen_name:screen_name, page:pagina}, function(tweets){
-      $('.carregando').fadeOut(function(){
-        for(x in tweets)
-          $('#lista-tweets').append('<li>'+tweets[x].text+'</li>');
-        $(this).remove();
+    <div id="container">
+      <h1>Tweets do Tableless</h1>
+      <ul id="lista-tweets"></ul>
+      <p><a href="#" id="carrega-tweets" data-pagina="1">Mais!</a></p>
+    </div>
+    <script>
+    $(function(){
+      retorna_tweets(1);
+      $('#carrega-tweets').click(function(e){
+        retorna_tweets($(this).data('pagina'));
+        e.preventDefault();
       });
-      $('#carrega-tweets').data('pagina', pagina + 1);
     });
-  };
 
-  </script>
+    function retorna_tweets(pagina){
+      $('#carrega-tweets').hide();
+      $('#lista-tweets').append('<li class="carregando">Aguarde, carregando...</li>');
+      var screen_name = 'tableless';
+      var formato = 'json';
+      var url = 'http://api.twitter.com/1/statuses/user_timeline.'+formato+"?callback=?";
+
+      $.getJSON(url, {screen_name:screen_name, page:pagina}, function(tweets){
+        $('.carregando').fadeOut(function(){
+          for(x in tweets)
+            $('#lista-tweets').append('<li>'+tweets[x].text+'</li>');
+          $(this).remove();
+          $('#carrega-tweets').data('pagina', pagina + 1).fadeIn();
+        });
+      });
+    }
+    </script>
 
   </body>
 </html>
