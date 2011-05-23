@@ -1,57 +1,54 @@
 <html>
 	<head>
-    <title>jQuery - o fim da paginação</title>
+    <title>jQuery - conteúdo on demand</title>
     <meta charset="utf-8" />
+    <link rel="stylesheet" href="tableless.css" />
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
-    <style>
-      #lista-tweets li{padding:20px;margin:10px}
-    </style>
 	</head>
   <body>
-    <h1>Tweet, tweet!</h1>
+    <div id="container">
+      <h1>Tweets do Tableless</h1>
 
-    <ul id="lista-tweets"></ul>
-  
- <script>
-  var timerScroll = "";
-  $(function(){
+      <ul id="lista-tweets"></ul>
+    </div>
 
-    retorna_tweets(1);
-
-    $('body').data('pagina', 1);
-
-    inicializa_scroll();
-
-  });
-
-  var inicializa_scroll = function(){
-    $(window).scroll(function() {
-      if($(window).scrollTop() + $(window).height() == $(document).height()) {
-        $(window).unbind('scroll');
-        retorna_tweets($('body').data('pagina'));
-      }
+   <script>
+    var ajax = "";
+    $(function(){
+      retorna_tweets(1);
+      $('body').data('pagina', 1);
+      inicializa_scroll();
     });
-  };
 
-  var retorna_tweets = function(pagina){
-    $('#lista-tweets').append('<li class="carregando">Aguarde, carregando...</li>');
-
-    var screen_name = 'davitferreira';
-    var url = 'http://api.twitter.com/1/statuses/user_timeline.json?callback=?';
-    
-    $('body').data('pagina', pagina + 1);
-
-    $.getJSON(url, {screen_name:screen_name, page:pagina}, function(tweets){
-      $('.carregando').fadeOut(function(){
-        for(x in tweets)
-          $('#lista-tweets').append('<li>'+tweets[x].text+'</li>');
-        $(this).remove();
-        inicializa_scroll();
+    function inicializa_scroll(){
+      $(window).scroll(function() {
+        if(($(window).scrollTop() + $(window).height() + 20) >= $(document).height()) {
+          $(window).unbind('scroll');
+          ajax.abort();
+          retorna_tweets($('body').data('pagina'));
+        }
       });
-    });
-  };
+    }
 
-  </script>
+    function retorna_tweets(pagina){
+      $('#lista-tweets').append('<li class="carregando">Aguarde, carregando...</li>');
+
+      var screen_name = 'tableless';
+      var url = 'http://api.twitter.com/1/statuses/user_timeline.json?callback=?';
+    
+      $('body').data('pagina', pagina + 1);
+
+      ajax = $.getJSON(url, {screen_name:screen_name, page:pagina}, function(tweets){
+        $('.carregando').fadeOut(function(){
+          for(x in tweets)
+            $('#lista-tweets').append('<li>'+tweets[x].text+'</li>');
+          inicializa_scroll();
+          $(this).remove();
+        });
+      });
+    }
+
+    </script>
 
   </body>
 </html>

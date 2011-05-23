@@ -1,0 +1,58 @@
+* {
+	margin:0;
+	padding:0;
+}
+
+body {
+  font-family:Helvetica, Arial, sans-serif;
+  background-color:#EDEBDE;
+}
+
+h1 {
+  font-size:36px;
+  text-align:center;
+  letter-spacing:-2px;
+  margin:12px 0 12px 0;
+  color:#AD2424;
+}
+
+div#container {
+  width:940px;
+  margin:20px auto;
+  background-color: #F7F7F7;
+  border: 1px solid #C3C8BD;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  padding:10px;
+}
+
+#lista-tweets li {
+  padding: 10px;
+  margin: 10px;
+  list-style:none;
+  border-bottom:1px solid #c3c8bd;
+  color:#666;
+}
+
+a#carrega-tweets {
+  display:block;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  background-color:#f2f2f2;
+  border:1px solid #ccc;
+  padding:10px;
+  text-align:center;
+  margin:10px;
+  color:#AD2424;
+  font-weight:900;
+}
+
+li.carregando {
+  color:#AD2424!important;
+  font-style:oblique;
+  text-align:center;
+  border:1px solid #ccc;
+  background-color:#ffffcc;
+}

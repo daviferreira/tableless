@@ -11,19 +11,100 @@
 
     <hr />
 
-    <p>Nem sempre uma paginação é a melhor maneira de limitar o conteúdo exibido em um site. Ás vezes pode ser bem chato ficar indo de página em página procurando alguma coisa, você acaba se perdendo. O Twitter é um bom exemplo. Na interface do aplicativo, o botão "load more" faz as vezes de uma paginação e carrega a próxima sequência de tweets em sua timeline.</p>
+<p>Nem sempre uma paginação é a melhor maneira de limitar o conteúdo exibido em um site. Ás vezes pode ser bem chato ficar indo de página em página procurando alguma coisa, você acaba se perdendo. O Twitter é um bom exemplo. Na interface do aplicativo, o botão "load more" faz as vezes de uma paginação e carrega a próxima sequência de tweets em sua timeline.</p>
 
-    <p>Neste artigo, além do link para carregar os próximos conteúdos, veremos também uma abordagem mais dinâmica onde o conteúdo é carregado assim que o scroll atinge o final da página.</p>
+<p>Neste artigo, além do link para carregar os próximos conteúdos, veremos também uma abordagem mais dinâmica onde o conteúdo é carregado assim que o scroll atinge o final da página.</p>
 
-    <p>E por falar em Twitter, nossos exemplos utilizarão sua API para carregar os dados de exemplo, mas é claro que eles funcionam com qualquer script que forneça os dados em JSON.</p>
+<p>E por falar em Twitter, nossos exemplos utilizarão sua API para carregar os dados de exemplo, mas é claro que eles funcionam com qualquer script que forneça os dados em JSON.</p>
 
-    <h3>Load more</h3>
+<h3>Carregando tweets</h3>
 
-  
+[cce lang="javascript"]
+var screen_name = 'tableless';
+var formato = 'json';
+var url = 'http://api.twitter.com/1/statuses/user_timeline.'+formato+"?callback=?";
 
-    <h3>Carregamento automático</h3>
+$.getJSON(url, {screen_name:screen_name, page:pagina}, function(tweets){
+  // nosso código
+});
+[/cce]
 
-    <h3>Próximos passos</h3>
+<h3>Load more</h3>
+
+[cce lang="html"]
+<ul id="lista-tweets"></ul>
+
+<a href="#" id="carrega-tweets" data-pagina="1">Mais!</a>
+[/cce]
+
+[cce lang="javascript"]
+$('#carrega-tweets').click(function(e){
+  retorna_tweets($(this).data('pagina'));
+  e.preventDefault();
+});
+[/cce]
+
+[cce lang="javascript"]
+function retorna_tweets(pagina){
+  $('#carrega-tweets').hide();
+  $('#lista-tweets').append('<li class="carregando">Aguarde, carregando...</li>');
+  var screen_name = 'tableless';
+  var formato = 'json';
+  var url = 'http://api.twitter.com/1/statuses/user_timeline.'+formato+"?callback=?";
+
+  $.getJSON(url, {screen_name:screen_name, page:pagina}, function(tweets){
+    $('.carregando').fadeOut(function(){
+      for(x in tweets)
+        $('#lista-tweets').append('<li>'+tweets[x].text+'</li>');
+      $(this).remove();
+      $('#carrega-tweets').data('pagina', pagina + 1).fadeIn();
+    });
+  });
+}
+[/cce]
+
+<h3>Carregamento automático</h3>
+
+[cce lang="javascript"]
+var ajax = "";
+$(function(){
+  retorna_tweets(1);
+  $('body').data('pagina', 1);
+  inicializa_scroll();
+});
+[/cce]
+
+[cce lang="javascript"]
+function inicializa_scroll(){
+  $(window).scroll(function() {
+    if(($(window).scrollTop() + $(window).height() + 20) >= $(document).height()) {
+      $(window).unbind('scroll');
+      ajax.abort();
+      retorna_tweets($('body').data('pagina'));
+    }
+  });
+}
+[/cce]
+
+[cce lang="javascript"]
+function retorna_tweets(pagina){
+  $('#lista-tweets').append('<li class="carregando">Aguarde, carregando...</li>');
+
+  var screen_name = 'tableless';
+  var url = 'http://api.twitter.com/1/statuses/user_timeline.json?callback=?';
+
+  $('body').data('pagina', pagina + 1);
+
+  ajax = $.getJSON(url, {screen_name:screen_name, page:pagina}, function(tweets){
+    $('.carregando').fadeOut(function(){
+      for(x in tweets)
+        $('#lista-tweets').append('<li>'+tweets[x].text+'</li>');
+      inicializa_scroll();
+      $(this).remove();
+    });
+  });
+}
+[/cce]
 
   </body>
 </html>
