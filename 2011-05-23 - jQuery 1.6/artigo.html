@@ -7,19 +7,46 @@
   <body>
     <h1>jQuery 1.6: o que há de novo?</h1>
 
-    <p></p>
+	<p>Lançada recentemente, a versão 1.6 do jQuery vem carregada de novidades. Algumas, inclusive, podem causar problemas de compatibilidade com scripts mais antigos, como é o caso da alteração no retorno do método .data(). Os desenvolvedores, no entanto, reforçam que aqueles que utilizam a versão 1.5.2 do jQuery não deverão ter problemas com atualizações.</p>
 
-    <hr />
+	<p>Abaixo você confere as principais alterações dessa nova versão:</p>
 
-    <p></p>
+	<h3>O método .prop()</h3>
 
-    <h3>O método .prop()</h3>
+	<p>Essa novidade visa separar os atributos de um elemento e as propriedades do DOM. Em versões anteriores, tanto atributos como propriedades eram tratados com o método .attr().</p>
 
-    <h3>Mudanças no método .data()</h3>
+	<p>E qual é a diferença entre atributos e propriedades?</p>
 
-    <h3>O seletor :focus</h3>
+	<p>Basicamente atributos representam o estado inicial de um elemento enquanto a propriedade reflete seu estado atual. De uma forma ainda mais simples, atributo é o que você consegue ver escrito no código-fonte da página.</p>
 
-    <h3>Valores relativos para CSS</h3>
+	<p>Essa mudança afeta, principalmente, os atributos booleanos como <em>checked</em> e <em>selected</em> e propriedades da janela (window) e do documento (document) - elementos que não possuem atributos.</p>
+
+	<h3>Mudanças no método .data()</h3>
+
+	<p>Data namecase</p>
+
+	<h3>O seletor :focus</h3>
+
+	<p>input focus</p>
+
+	<h3>Valores relativos para CSS</h3>
+
+	<p>css relativo</p>
+
+	[cc lang="javascript"]
+	$('p#conteudo').css('marginTop', '+=100px');
+	[/cc]
+
+	<h3>Referências</h3>
+
+	<ul>
+	<li>Para uma lista completa de alterações, correções e um manual completo de migração de versões anteriores, leia os posts no site oficial do jQuery:<br />
+	<a href="http://blog.jquery.com/2011/05/12/jquery-1-6-1-released/" target="_blank">http://blog.jquery.com/2011/05/12/jquery-1-6-1-released/</a><br />
+	<a href="http://blog.jquery.com/2011/05/03/jquery-16-released/" target="_blank">http://blog.jquery.com/2011/05/03/jquery-16-released/</a></li>
+
+	<li>Para saber que método utilizar, .attr() ou .prop(), utilize a ferramenta criada por Schalk Neethling:<br />
+	<a href="http://which-should-i-use.ossreleasefeed.com/" target="_blank">http://which-should-i-use.ossreleasefeed.com/</a></li>
+	</ul>
 
   </body>
 </html>
