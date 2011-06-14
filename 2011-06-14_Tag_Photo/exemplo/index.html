@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Tag</title>
+    <link href="css/exemplo.css" rel="stylesheet" />     
+    <link href="jquery.imgareaselect-0.9.6/css/imgareaselect-default.css" rel="stylesheet" />     
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+    <script src="jquery.imgareaselect-0.9.6/scripts/jquery.imgareaselect.min.js"></script>
+  </head>
+  <body>
+    <div id="container">
+    <h1>Teste</h1>
+
+    <p><img src="img/1.png" class="foto" /></p>
+
+    <hr />
+
+    <p><img src="img/2.jpg" class="foto" /></p>
+
+    <hr />
+
+    <p><img src="img/3.jpg" class="foto" /></p>
+
+    <hr />
+
+    <p><img src="img/4.jpg" class="foto" /></p>
+
+    <hr />
+    </div>
+
+<script type="text/javascript">
+$(function(){
+  $('img.foto').imgAreaSelect({
+      handles: false,
+      onSelectEnd: formTag
+  });
+});
+
+var formTag = function(img, selection){
+  $('.form-tag').remove();
+  $('<div class="form-tag"><input type="text" size="20" /></div>').insertAfter(img);
+};
+</script>
+
+  </body>
+</html>
