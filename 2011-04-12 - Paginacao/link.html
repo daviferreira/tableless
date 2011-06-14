@@ -19,14 +19,15 @@
         e.preventDefault();
       });
     });
+    
 
+    
     function retorna_tweets(pagina){
       $('#carrega-tweets').hide();
       $('#lista-tweets').append('<li class="carregando">Aguarde, carregando...</li>');
       var screen_name = 'tableless';
       var formato = 'json';
       var url = 'http://api.twitter.com/1/statuses/user_timeline.'+formato+"?callback=?";
-
       $.getJSON(url, {screen_name:screen_name, page:pagina}, function(tweets){
         $('.carregando').fadeOut(function(){
           for(x in tweets)

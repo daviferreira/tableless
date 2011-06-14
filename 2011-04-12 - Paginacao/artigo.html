@@ -1,30 +1,39 @@
 <html>
-  <head>
-    <title>Artigo</title>
-    <meta charset="utf-8" />
-    <link href="../exemplo.css" rel="stylesheet" />
-  </head>
-  <body>
-    <h1>Conteúdo on demand com jQuery</h1>
+<head>
+<title>Artigo</title>
+<meta charset="utf-8" />
+<link href="../exemplo.css" rel="stylesheet" />
+</head>
+<body>
+<h1>Conteúdo sob demanda com jQuery</h1>
 
-    <p>Aprenda a exibir o conteúdo a medida que o usuário solicita, acabando com a necessidade paginação e/ou atualização da página.</p>
+<p>Veja como exibir o conteúdo do seu site acabando com a necessidade de paginação e atualização da página.</p>
 
-    <hr />
+<hr />
 
-<p>Nem sempre uma paginação é a melhor maneira de limitar o conteúdo exibido em um site. Ás vezes pode ser bem chato ficar indo de página em página procurando alguma coisa, você acaba se perdendo. O Twitter é um bom exemplo. Na interface do aplicativo, o botão "load more" faz as vezes de uma paginação e carrega a próxima sequência de tweets em sua timeline.</p>
+
+
+
+<p>Nem sempre uma paginação é a melhor maneira de limitar o conteúdo exibido em um site. Às vezes pode ser bem chato ficar indo de página em página procurando alguma coisa, você acaba se perdendo. O Twitter é um bom exemplo. Na interface do aplicativo, o botão "load more" faz as vezes de uma paginação e carrega a próxima sequência de tweets em sua timeline.</p>
 
 <p>Neste artigo, além do link para carregar os próximos conteúdos, veremos também uma abordagem mais dinâmica onde o conteúdo é carregado assim que o scroll atinge o final da página.</p>
 
 <p>E por falar em Twitter, nossos exemplos utilizarão sua API para carregar os dados de exemplo, mas é claro que eles funcionam com qualquer script que forneça os dados em JSON.</p>
 
+<p><a href="#" target="_blank">Clique aqui para fazer o download</a> ou <a href="#" target="_blank">para visualizar os exemplos no navegador</a></p>
+
 <h3>Carregando tweets</h3>
 
+<p>A API do Twitter oferece a possibilidade de baixar os últimos tweets de um usuário utilizando apenas JavaScript. A API oferece opção de saída em vários formatos, entre eles XML, Atom e JSON (formato utilizado em nosso exemplo).</p>
+
+<p>A URL recebe um parâmetro callback, que seria a função JavaScript que encapsularia o resultado. No nosso caso utilizamos o callback "?" para indicar que queremos apenas os dados em JSON. Na nossa chamada ajax passamos ainda o nome da conta no Twitter e o número da página dos tweets.</p>
+
 [cce lang="javascript"]
-var screen_name = 'tableless';
+var usuario = 'tableless';
 var formato = 'json';
 var url = 'http://api.twitter.com/1/statuses/user_timeline.'+formato+"?callback=?";
 
-$.getJSON(url, {screen_name:screen_name, page:pagina}, function(tweets){
+$.getJSON(url, {screen_name:usuario, page:pagina}, function(tweets){
   // nosso código
 });
 [/cce]
@@ -32,9 +41,9 @@ $.getJSON(url, {screen_name:screen_name, page:pagina}, function(tweets){
 <h3>Load more</h3>
 
 [cce lang="html"]
-<ul id="lista-tweets"></ul>
+<ul></ul>
 
-<a href="#" id="carrega-tweets" data-pagina="1">Mais!</a>
+<a href="#" id="carrega-tweets">Mais!</a>
 [/cce]
 
 [cce lang="javascript"]
@@ -77,7 +86,7 @@ $(function(){
 [cce lang="javascript"]
 function inicializa_scroll(){
   $(window).scroll(function() {
-    if(($(window).scrollTop() + $(window).height() + 20) >= $(document).height()) {
+    if(($(window).scrollTop() + $(window).height() + 20) &gt;= $(document).height()) {
       $(window).unbind('scroll');
       ajax.abort();
       retorna_tweets($('body').data('pagina'));
@@ -106,5 +115,11 @@ function retorna_tweets(pagina){
 }
 [/cce]
 
-  </body>
+
+
+
+
+
+
+</body>
 </html>

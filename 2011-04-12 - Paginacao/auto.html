@@ -22,7 +22,7 @@
 
     function inicializa_scroll(){
       $(window).scroll(function() {
-        if(($(window).scrollTop() + $(window).height() + 20) >= $(document).height()) {
+        if(($(window).scrollTop() + $(window).height() + 10) >= $(document).height()) {
           $(window).unbind('scroll');
           ajax.abort();
           retorna_tweets($('body').data('pagina'));
