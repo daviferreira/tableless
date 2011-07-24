@@ -3,77 +3,93 @@
   <head>
     <meta charset="utf-8" />
     <title>Taggeando fotos com jQuery</title>
-    <link href="css/exemplo.css" rel="stylesheet" />     
-    <link href="jquery.imgareaselect-0.9.6/css/imgareaselect-default.css" rel="stylesheet" />     
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
-    <script src="jquery.imgareaselect-0.9.6/scripts/jquery.imgareaselect.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui-1.8.13.custom.min.js"></script>
+    <script type="text/javascript" src="js/jquery.imgareaselect-0.9.6/scripts/jquery.imgareaselect.min.js"></script>
+    <link href="css/exemplo.css" rel="stylesheet" />     
+    <link href="css/ui-lightness/jquery-ui-1.8.13.custom.css" rel="stylesheet" />
+    <link href="js/jquery.imgareaselect-0.9.6/css/imgareaselect-default.css" rel="stylesheet" />     
   </head>
   <body>
     <div id="container" class="round-small shadow">
-    <h1>Taggeando fotos com jQuery</h1>
+      <h1>Taggeando fotos com jQuery</h1>
 
-    <p><img src="img/ramones.jpg" id="foto" /></p>
-    <p><a href="#" class="toggle-tags">ocultar tags</a></p>
+      <p>
+        <img src="img/ramones.jpg" id="foto" />
+        <span class="tag" style="height: 74px; width: 62px; top: 12px; left: 177px;">Marky Ramone</span>
+      </p>
+      <p><a href="#" class="toggle-tags">ocultar tags</a></p>
 
     </div>
 
-<script type="text/javascript">
-var ias = "";
-$(function(){
-  ias = $('img#foto').imgAreaSelect({
-      handles: false,
+   <script type="text/javascript">
+  var ias = "";
+  $(function(){
+    $('.tag')
+      .draggable({ containment: '#foto' })
+      .resizable({ containment: '#foto', ghost: true });
+
+    ias = $('img#foto').imgAreaSelect({
+      handles: true,
       instance: true,
       onSelectEnd: formTag,
       onSelectStart: function(){
-	$('.form-tag').remove();
+        $('.form-tag').remove();
       }
+    });
+
+    $('.toggle-tags').click(function(e){
+      $('.tag').toggle();
+      if($('.tag:visible').length > 0) 
+        $(this).text('ocultar tags');
+      else 
+        $(this).text('exibir tags');
+      e.preventDefault();
+    });
   });
-	$('.toggle-tags').click(function(e){
-		$('.tag').toggle();
-if($('.tag:visible').length > 0) $(this).text('ocultar tags');
-else $(this).text('exibir tags');
-		e.preventDefault();
-	});
-});
 
-var formTag = function(img, selection){
-  $('.form-tag').remove();
-  if(selection.width > 0 && selection.height > 0){
-    $('<div class="form-tag shadow round-small"><input type="text" size="20" class="tag-name" /></div>').insertAfter(img);
-    $('.form-tag').css({
-      	  top : (selection.y1 + selection.height) + 'px',
-      	  left : selection.x1 + 'px'
-    	})
-	.find('input.tag-name')
-	  .focus()
-	  .data('selection', selection);
-  }
-};
+  var formTag = function(img, selection){
+    $('.form-tag').remove();
+    if(selection.width > 0 && selection.height > 0){
+      $('<div class="form-tag shadow round-small"><input type="text" size="20" class="tag-name" /></div>').insertAfter(img);
+      $('.form-tag')
+        .css({
+          top : (selection.y1 + selection.height),
+          left : selection.x1
+        })
+        .find('input.tag-name')
+        .focus()
+        .data('selection', selection);
+    }
+  };
 
-$('input.tag-name').live('keyup', function(e){
-  if(e.keyCode == 13 || e.which == 13){
-    if($(this).val() != ""){
-      var selection = $(this).data('selection');
-      $('<div class="tag"><span>'+$(this).val()+'<span></div>').appendTo($(this).parent().parent());
-      $('.tag:last').css({
-	height: selection.height+'px',
-	width: selection.width+'px',
-	top: selection.y1+'px',
-	left:selection.x1+'px'
-      });
+  $('input.tag-name').live('keyup', function(e){
+    if(e.keyCode == 13 || e.which == 13){ // enter
+      if($(this).val() != ""){
+        var selection = $(this).data('selection');
+        $('<span class="tag">'+$(this).val()+'</span>').appendTo($(this).parent().parent());
+        $('.tag:last')
+          .css({
+            height: selection.height,
+            width: selection.width,
+            top: selection.y1,
+            left:selection.x1
+          })
+          .draggable({ containment: '#foto' })
+          .resizable({ containment: '#foto', ghost: true });
+        limpaFormTag();
+      }
+    }else if(e.keyCode == 27 || e.which == 27){ // esc
       limpaFormTag();
     }
-  }else if(e.keyCode == 27 || e.which == 27){
-    limpaFormTag();
-  }
-});
+  });
 
-var limpaFormTag = function(){
-  $('.form-tag').remove();
-  ias.setOptions({hide:true});
-  ias.update();
-};
-</script>
+  var limpaFormTag = function(){
+    $('.form-tag').remove();
+    ias.setOptions({hide:true});
+    ias.update();
+  };
+  </script>
 
   </body>
 </html>
