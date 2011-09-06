@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Testando seus aplicativos jQuery com Jasmine - Parte 1</title>
+    <title>Testando seu código jQuery com Jasmine - Parte 1</title>
     <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap-1.2.0.min.css">
     <meta charset="utf-8" />
   </head>
   <body>
     <div class="container">
       <div class="page-header">
-        <h2>Testando seus aplicativos jQuery com Jasmine - Parte 1</h2>
+        <h2>Testando seu código jQuery com Jasmine - Parte 1</h2>
       </div>
 
       <p><em>Com a evolução do desenvolvimento em JavaScript, testes automatizados começam a ganhar cada vez mais força. Neste artigo você conhece um pouco mais sobre a biblioteca Jasmine, focada em BDD &mdash;  Behavior Driven Development.</em></p>
@@ -17,33 +17,33 @@
 
       <p>Durante muito tempo testar/debugar JavaScript era uma tarefa árdua (infelizmente, em alguns navegadores, ainda é). Quem aí se lembra do tempo que não existia Firebug, por exemplo? E o tamanho dos scripts? Um simples menu drop-drown possuía umas 1.500 linhas de código. Não existia jQuery ou qualquer outro tipo de framework. Tempos difíceis.</p>
 
-      <p>Hoje a tarefa do desenvolvedor é muito mais fácil. Para debug temos o já citado Firebug e o Developer Tools do Chrome, entre outros. Nos testes, além do <a href="http://pivotal.github.com/jasmine/" target="_blank">Jasmine</a>, outro framework bem legal é o <a href="http://docs.jquery.com/Qunit">QUnit</a>. O Jasmine, no entanto, possui uma sintaxe mais fluida e mais legível para o ser humano. Quem programa em Ruby/Rails vai notar a enorme semelhança com a ferramenta RSpec.</p>
+      <p>Hoje a tarefa do desenvolvedor é muito mais fácil. Para debug temos o já citado Firebug e o Developer Tools do Chrome, entre outros. Nos testes, além do <a href="http://pivotal.github.com/jasmine/" target="_blank">Jasmine</a>, outro framework bem legal é o <a href="http://docs.jquery.com/Qunit">QUnit</a>. O Jasmine, por focar em BDD, possui uma sintaxe mais fluida e mais legível. Quem programa em Ruby/Rails vai notar a enorme semelhança com a ferramenta RSpec.</p>
 
       <p>Nos exemplos vou utilizar uma versão modificada do Jasmine, jasmine-jquery. Ela possui alguns métodos próprios para o framework além de funções para carregar fixtures (templates).</p>
 
       <h3>Baby steps</h3>
 
-      <p>Começar a trablhar com uma cultura de testar sempre antes de desenvolver é bem difícil, principalmente para quem já está acostumado a programar antes e testar depois (manualmente). Comece devagar, sem medo. No início as coisas serão um pouco confusas, mas quando você adotar de vez essa prática você vai se perguntar como era possível programar sem testes antes.</p>
+      <p>Começar a trablhar com uma cultura de testar sempre antes de desenvolver é bem difícil, principalmente para quem já está acostumado a programar antes e testar depois (manualmente). Comece devagar, sem medo. No início as coisas serão um pouco confusas, mas quando você adotar de vez essa prática você vai se perguntar como era possível programar sem testes.</p>
 
-      <p>O que testar e que testes escrever? Isso também vem com o tempo. Comece testando uma ou outra funcionalidade principal de uma aplicação já existente. Entenda como funciona a sua ferramente de testes. Depois de um tempo comece a acreditar na sua intuição na hora de escrever testes.</p>
+      <p>O que testar e que testes escrever? Isso também vem com o tempo. Comece testando uma ou outra funcionalidade principal de uma aplicação já existente. Entenda como funciona a sua ferramente de testes. Depois de um tempo comece a acreditar e confiar na sua intuição.</p>
 
       <p>Outra dica legal é testar sempre várias possibilidades. Não fique preso à possibilidades padrão, possibilidades esperadas. Pense nos diferentes contextos da sua aplicação e nos eventos inesperados.</p>
 
       <p>Testes não evitam que seu software, uma vez finalizado, tenha bugs; não são a solução para todos os seus problemas de <em>deploy</em> &mdash; mas facilitam bastante essas etapas.</p>
 
-      <h3>Red > Green > Refactor</h3>
+      <h3>Red &rarr; Green &rarr; Refactor</h3>
 
       <p>O padrão básico a ser seguido é o seguinte:</p>
 
       <ol>
-        <li>Escreva o teste;</li>
-        <li>Escreva a menor quantidade de código possível, o código mais simples, que faça o teste passar;</li>
+        <li>Escreva o teste &mdash; naturalmente, ele vai falhar;</li>
+        <li>Escreva, sem se preocupar muito com qualidade, o código mais simples, que faça o teste passar;</li>
         <li>Reescreva seu código, implementando melhorias de performance, escalabilidade e removendo duplicidades.</li>
       </ol>
 
       <h3>Configurando o jasmine-jquery</h3>
 
-      <p>Baixe a última versão do <a href="https://github.com/velesin/jasmine-jquery" target="_blank">jasmine-jquery</a> e vamos começar com nossos primeiros testes. A estrutura de pastas do nosso aplicativo deve ficar da seguitne maneira:</p>
+      <p>Baixe a última versão do <a href="https://github.com/velesin/jasmine-jquery" target="_blank">jasmine-jquery</a> e vamos começar com nossos primeiros testes. A estrutura de pastas do nosso aplicativo deve ficar da seguinte maneira:</p>
 
 <pre class="xml">- /
   - /tests
@@ -59,47 +59,142 @@
 
       <p>No início do SpecRunner ficam as chamadas para os testes:</p>
 
-<pre class="javascript">&lt;script type="text/javascript" src="spec/suites/tableless-spec.js">&lt;/script></pre>
+<pre class="javascript">&lt;script type="text/javascript" src="spec/suites/saudacao-spec.js">&lt;/script></pre>
 
       <p>Você também pode incluir aqui qualquer javascript personalizado da sua aplicação que seja necessário para os testes. No nosso caso vamos incluir o arquivo tableless.js, que fica na raiz da nossa aplicação.</p>
 
 <pre class="javascript">&lt;script type="text/javascript" src="../tableless.js">&lt;/script></pre>
 
-      <h3>Meu primeiro teste</h3>
+      <h3>Nosso primeiro teste</h3>
 
-      <p>Para nosso primeiro teste, vamos supor o seguinte: uma página deve exibir uma mensagem de boas-vindas para o usuário que varia de acordo com o horário. De 5 da manhã ao meio-dia, exibe "Bom dia!"; de meio-dia até 6 da tarde, exibe "Boa tarde!"; de 6 à meia-noite, exibe "Boa noite!"; e, por fim, de meia-noite até 6 da manhã exibe "Dormir é para os fracos!". A mensagem fica sempre dentro de um elemento div com id "mensagem". Os horários vão desde a hora inicial (incluída) até a hora final.</p>
+      <p>Vamos supor o seguinte: uma página deve exibir uma mensagem de boas-vindas para o usuário que varia de acordo com o horário. De 5 da manhã ao meio-dia, exibe "Bom dia!"; de meio-dia até 6 da tarde, exibe "Boa tarde!"; de 6 à meia-noite, exibe "Boa noite!"; e, por fim, de meia-noite até 6 da manhã exibe "Dormir é para os fracos!". A mensagem fica sempre dentro de um elemento div com id "mensagem". Os horários vão desde a hora inicial (incluída) até a hora final. A função pode receber como parâmetro uma hora válida ou, caso não receba nada, exibe a mensagem de acordo com a hora do usuário.</p>
 
       <p>Esse é um bom começo para seus testes, tente escrever, em um parágrafo, o que deve ser executado e o que é esperado. Trabalhe sempre com um pedaço de papel por perto, para rascunhos.</p>
 
-      <p>Vejamos como ficaria o desenho inicial dos nossos testes. Crie o arquivo /tests/spec/suites/boasvindas-spec.js e digite o seguinte código:</p>
+      <p>Vejamos como ficaria o desenho inicial dos nossos testes. Crie o arquivo /tests/spec/suites/saudacao-spec.js e digite o seguinte código:</p>
 
 <pre class="javascript">describe('Exibição da mensagem de boas-vindas', function(){
   beforeEach(function(){
     setFixtures('&lt;div id="mensagem" />');
-    this.data_hora = '';
+    this.horas = [];
   });
 
-  it("Deve exibir 'Bom-dia!' entre 5 da manhã e meio-dia", function(){
+  it("Deve exibir 'Bom-dia!' entre 5:00 e 11:59", function(){
   });
 
-  it("Deve exibir 'Boa-tarde!' entre meio-dia e 6 da tarde", function(){
+  it("Deve exibir 'Boa-tarde!' entre 12:00 e 17:59", function(){
   });
 
-  it("Deve exibir 'Boa-noite!' entre 6 da tarde e meia-noite", function(){
+  it("Deve exibir 'Boa-noite!' entre 18:00 e 23:59", function(){
   });
 
-  it("Deve exibir 'Dormir é para os fracos!' entre meia-noite e 6 da manhã", function(){
+  it("Deve exibir 'Dormir é para os fracos!' de 00:00 a 04:59", function(){
   });
 
-  it("Deve exibir a mensagem correta de acordo com a hora do usuário", function(){
+  it("Deve exibir, por padrão, a mensagem de acordo com a hora do cliente", function(){
   });
 });</pre>
 
-  <p>Uma observação rápida: eu costumo escrever meus testes em inglês, para seguir a fluidez que o BDD proporciona. É mais fácil, na minha opinião, seguir como 'it("Should display...")'. No entanto, vou utilizar português nos nossos testes para todo mundo poder entender melhor. Você deve fazer da maneira que for melhor para você e seu time.</p>
+  <p>Uma observação rápida: eu costumo escrever meus testes em inglês, para seguir a fluidez que o BDD proporciona. É mais fácil, na minha opinião, seguir como 'it("Should display...")'. No entanto, vou utilizar português nos nossos testes para que todo mundo possa entender melhor. Você deve fazer da maneira que for melhor para você e seu time.</p>
 
-  <p>Os conceitos básicos dos nossos testes giram em torno de duas funções: <strong>describe</strong> e <strong>it</strong>. Outra função útil, mas que nem sepre estará presente, é a <strong>beforeEach</strong>.</p>
+  <p>Na raiz da aplicação, crie um arquivo chamado "tableless.js". Nele nós escreveremos nossa função para exibir a mensagem de acordo com a hora. Sua estrutura inicial é a seguinte:</p>
 
-   <h3>Fixtures</h3>
+<pre class="javascript">function saudacao(hora_atual){
+  var hora;    
+}</pre>  
+
+  <p>Os conceitos básicos dos nossos testes giram em torno de duas funções: <strong>describe</strong> e <strong>it</strong>. Outra função útil, mas que nem sepre estará presente, é a <strong>beforeEach</strong>. Também trabalhamos com uma função do jasmine-jquery, a <strong>setFixtures</strong> &mdash; falarei mais sobre ela na parte 2, por enquanto você só precisa saber que ela define templates/elementos no DOM.</p>
+
+  <ul>
+    <li><strong>describe</strong> &mdash; a função describe representa um conjunto de testes/situações. Podem existir situações dentro de situações, por exemplo:
+<pre class="javascript">describe('Login', function(){
+  describe('Sucesso', function(){
+  });
+  
+  describe('Falha', function(){
+  });
+});</pre>  
+    </li>
+    <li><strong>it</strong> &mdash; define um teste, uma ação, um comportamento. Por exemplo, "It should validate the username", ou, "Deve validar o nome do usuário", seria uma boa situação para nosso teste de login.</li>
+    <li><strong>beforeEach</strong> &mdash; a função beforeEach é executada antes de cada teste dentro de um conjunto, muito útil para reiniciar variáveis e configurar elementos.</li>
+  </ul>
+
+  <h3>Escrevendo os testes</h3>
+
+  <p>Agora chegou a hora de preencher os nossos testes. Os testes que verificam a mensagem entre uma hora e outra seguirão um mesmo padrão. Dado um conjunto de horas válidas, ele deve retornar a mensagem correta.</p>
+
+<pre class="javascript">it("Deve exibir 'Bom-dia!' entre 5:00 e 11:59", function(){
+  this.horas = ['05:00', '09:33', '10:22', '11:59'];
+  for(i in this.horas){
+    saudacao(this.horas[i]);
+    expect($('#mensagem').text()).toEqual('Bom-dia!');
+  }
+});</pre>
+
+  <p>O teste que valida o retorno da função saudacao sem passagem de parâmetro busca a hora do cliente e exibe a mensagem de acordo com ela.</p>
+
+<pre class="javascript">it("Deve exibir, por padrão, a mensagem de acordo com a hora do cliente", function(){
+  var data = new Date;
+  data.setTime(data.getTime()); 
+  var hora = data.getHours();
+
+  saudacao();
+
+  if(hora < 5) 
+    expect($('#mensagem').text()).toEqual('Dormir é para os fracos!');
+  if(hora < 12)
+    expect($('#mensagem').text()).toEqual('Bom-dia!');
+  else if(hora < 18)
+    expect($('#mensagem').text()).toEqual('Boa-tarde!');
+  else
+    expect($('#mensagem').text()).toEqual('Boa-noite!');
+});</pre>
+
+  <p>Nesse momento, abrindo o SpecRunner no navegador, todos os nossos testes estarão falhando. Lembra da nossa regra? Red (falhou), Green (passou) e Refactor.</p>
+
+  <h3>A função saudacao()</h3>
+
+  <p>Abaixo segue a minha implementação da função saudacao(). Não me preocupei muito com repetições e performance. Meu objetivo principal era fazer o teste passar.</p>
+
+<pre class="javascript">function saudacao(hora_atual){
+  var hora;
+
+  if(typeof hora_atual == 'undefined'){
+    var data = new Date;
+    data.setTime(data.getTime()); 
+    hora = data.getHours();
+  }else{
+    hora = hora_atual.split(':');
+    hora = parseInt(hora[0].replace(/^0/, ''));
+  }
+
+  if(hora < 5)
+    $('#mensagem').text('Dormir é para os fracos!');
+  else if(hora < 12)
+    $('#mensagem').text('Bom-dia!');
+  else if(hora < 18)
+    $('#mensagem').text('Boa-tarde!');
+  else
+    $('#mensagem').text('Boa-noite!');
+}</pre>
+
+  <p>Atualizando nossa SpecRunner veremos agora que todos os testes estão passando. Você pode (e deve) desenvolver aos poucos. Valide um teste de cada vez. Desenvolva com calma.</p>
+
+  <h3>Melhorando nosso código</h3>
+
+  <p>Como de praxe, vou deixar um dever de casa para vocês: a etapa de refactoring. O que podemos melhorar na nossa função saudacao()? E se o usuário passar uma hora atualmente inválida para nossa função, como "meio-dia", "nove horas" etc. E se quisermos mudar o id do elemento #mensagem? Tem algum código/texto repetido? E nossos testes? Estão cobrindo tudo? Prevendo todos os cenários?</p>
+
+  <p>Na segunda parte veremos o método Spy, fixtures, matchers personalizados e outros recursos avançados.</p>
+
+  <h3>Referências</h3>
+
+  <ul>
+    <li><a href="#">Código fonte dos exemplos deste artigo</a></li>
+    <li><a href="http://pivotal.github.com/jasmine/" target="_blank">Jasmine BDD</a></li>
+    <li><a href="https://github.com/velesin/jasmine-jquery" target="_blank">jasmine-jquery</a></li>
+    <li><a href="http://pt.wikipedia.org/wiki/Behavior_Driven_Development" target="_blank">BDD segundo a Wikipedia</a></li>
+    <li><a href="http://www.franciscosouza.com/2011/05/testing-jquery-plugins-with-jasmine/" target="_blank">Testing jQuery plugins with Jasmine</a>
+  </ul>
 
   </body>
 </html>

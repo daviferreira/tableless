@@ -7,7 +7,7 @@ describe('Exibição da mensagem de boas-vindas', function(){
   it("Deve exibir 'Bom-dia!' entre 5:00 e 11:59", function(){
     this.horas = ['05:00', '09:33', '10:22', '11:59'];
     for(i in this.horas){
-      boasvindas(this.horas[i]);
+      saudacao(this.horas[i]);
       expect($('#mensagem').text()).toEqual('Bom-dia!');
     }
   });
@@ -15,7 +15,7 @@ describe('Exibição da mensagem de boas-vindas', function(){
   it("Deve exibir 'Boa-tarde!' entre 12:00 e 17:59", function(){
     this.horas = ['12:00', '13:33', '16:00', '17:59'];
     for(i in this.horas){
-      boasvindas(this.horas[i]);
+      saudacao(this.horas[i]);
       expect($('#mensagem').text()).toEqual('Boa-tarde!');
     }
   });
@@ -23,7 +23,7 @@ describe('Exibição da mensagem de boas-vindas', function(){
   it("Deve exibir 'Boa-noite!' entre 18:00 e 23:59", function(){
     this.horas = ['18:00', '19:56', '22:43', '23:59'];
     for(i in this.horas){
-      boasvindas(this.horas[i]);
+      saudacao(this.horas[i]);
       expect($('#mensagem').text()).toEqual('Boa-noite!');
     }
   });
@@ -31,7 +31,7 @@ describe('Exibição da mensagem de boas-vindas', function(){
   it("Deve exibir 'Dormir é para os fracos!' de 00:00 a 04:59", function(){
     this.horas = ['00:00', '01:01', '02:48', '04:59'];
     for(i in this.horas){
-      boasvindas(this.horas[i]);
+      saudacao(this.horas[i]);
       expect($('#mensagem').text()).toEqual('Dormir é para os fracos!');
     }
   });
@@ -41,7 +41,7 @@ describe('Exibição da mensagem de boas-vindas', function(){
     data.setTime(data.getTime()); 
     var hora = data.getHours();
 
-    boasvindas();
+    saudacao();
 
     if(hora < 5)
       expect($('#mensagem').text()).toEqual('Dormir é para os fracos!');

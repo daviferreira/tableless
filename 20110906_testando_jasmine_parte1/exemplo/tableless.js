@@ -1,4 +1,4 @@
-function boasvindas(hora_atual){
+function saudacao(hora_atual){
   var hora;
 
   if(typeof hora_atual == 'undefined'){
