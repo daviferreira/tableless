@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Testando seus aplicativos jQuery com Jasmine</title>
+    <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap-1.2.0.min.css">
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="page-header">
+        <h2>Testando seus aplicativos jQuery com Jasmine</h2>
+      </div>
+
+      <p><em>Com a evolução do desenvolvimento em JavaScript, testes automatizados começam a ganhar cada vez mais força. Neste artigo você conhece um pouco mais sobre a biblioteca Jasmine, focada em BDD &mdash;  Behavior Driven Development.</em></p>
+
+      <hr />
+
+      <p>Durante muito tempo testar/debugar JavaScript era uma tarefa árdua. Quem aí se lembra do tempo que não existia Firebug, por exemplo? E o tamanho dos scripts? Um simples menu drop-drown possuía umas 1.500 linhas de código. Não existia jQuery ou qualquer outro tipo de framework. Tempos difíceis.</p>
+
+      <p>Hoje a tarefa do desenvolvedor é muito mais fácil. Para debug temos o já citado Firebug e o Developer Tools do Chrome. Nos testes, além do Jasmine, outro framework bem legal é o QUnit. O Jasmine, no entanto, possui uma sintaxe mais fluida e mais legível para o ser humano. Quem programa em Ruby/Rails vai notar a enorme semelhança com a ferramenta RSpec.</p>
+
+      <p>Nos exemplos vou utilizar uma versão modificada do Jasmine, jasmine-jquery. Ela possui alguns métodos próprios para o framework além de funções para carregar fixtures (templates).</p>
+
+      <h3>Baby steps</h3>
+
+      <p>Começar a trablhar com uma cultura de testar sempre antes de desenvolver é bem difícil, principalmente para quem já está acostumado a programar antes e testar depois. Comece devagar, sem medo. No início as coisas serão um pouco confusas. No entanto, quando você adotar de vez essa prática você vai se perguntar como era possível programar sem testes antes.</p>
+
+      <p>O que testar e que testes escrever? Isso também vem com o tempo. Comece testando uma ou outra funcionalidade principal de uma aplicação já existente. Entenda como funciona a sua ferramente de testes. Depois de um tempo comece a acreditar na sua intuição na hora de escrever testes.</p>
+
+      <p>Outra dica legal é testar sempre várias possibilidades. Não fique preso à possibilidades padrão, possibilidades esperadas. Pense nos diferentes contextos da sua aplicação e nos eventos inesperados.</p>
+
+      <p>Testes não vão evitar que seu software tenha bugs, não é a solução para todos os seus problemas de deploy, mas facilita bastante essas etapas.</p>
+
+      <h3>Red > Green > Refactor</h3>
+
+      <p>O padrão básico a ser seguido é o seguinte:</p>
+
+      <ol>
+        <li>Escreva o teste;</li>
+        <li>Escreva a menor quantidade de código possível, o código mais simples, que faça o teste passar;</li>
+        <li>Reescreva seu código, implementando melhorias de performance e removendo duplicidades.</li>
+      </ol>
+
+      <h3>Configurando o jasmine-jquery</h3>
+
+      <p>Baixe a última versão do <a href="https://github.com/velesin/jasmine-jquery" target="_blank">jasmine-jquery</a> e vamos começar com nossos primeiros testes. A estrutura de pastas do nosso aplicativo deve ficar a seguitne:</p>
+
+      [cce lang="xml"]
+      - /
+        - /tests
+          - /lib
+          - /spec
+          - /vendor
+          - SpecRunner.html
+      [/cce]
+
+      <p>Note que criamos um diretório "tests" onde ficarão todos os arquivos dos nossos testes, incluindo a biblioteca Jasmine. O arquivo SpecRunner.html é o responsável por executar e exibir os resultados dos testes, basta abri-lo no navegador. Dentro do diretório "tests/spec" ficarão nossos testes.</p>
+
+      <p>No início do SpecRunner ficam as chamadas para os testes:</p>
+
+      [cce lang="xml"]
+      &lt;script type="text/javascript" src="spec/suites/tableless-spec.js">&lt;/script>
+      [/cce]
+
+      <p>Você também pode incluir aqui qualquer javascript personalizado da sua aplicação que seja necessário para os testes.</p>
+
+      <h3>Meu primeiro teste</h3>
+
+      <h3>Espiões</h3>
+
+      <h3>Fixtures</h3>
+
+      <h3>Testando um validador de formulários</h3>
+  </body>
+</html>
