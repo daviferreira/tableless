@@ -1,7 +1,5 @@
-# Tableless
+# daviferreira @ tableless
 
-Arquivos de exemplo e conteúdo dos meus artigos no tableless.
+Arquivos de exemplo e conteúdo dos meus artigos no [Tableless](http://tableless.com.br/categoria/client-side/jquery/).
 
-www.tableless.com.br
-
-*Note:* Not all articles are here, some were published directly on WP. Some are undone. Some are different from the published ones.
+*Nota:* Nem todos os artigos estão neste repositório. Alguns foram publicados diretamente via WordPress, outros estão incompletos e, por fim, alguns estão diferentes da versão publicada.
