@@ -11,11 +11,22 @@
         <h2>Testando seu código jQuery com Jasmine - Parte 2</h2>
       </div>
 
-      <p><em>Abstract</em></p>
+      <p><em>Nesta segunda parte você conhece um pouco mais sobre o framework de testes Jasmine. 
+            Aprenda a testar AJAX, simular métodos e criar matchers personalizados.</em></p>
 
       <hr />
 
+      <p>Jasmine é um framework para testes focado em BDD (<em>Behavior Driven Development</em>). Na <a href="http://tableless.com.br/testando-seu-codigo-jquery-com-jasmine-parte-1/">primeira parte</a> deste artigo aprendemos seus métodos básicos e realizamos alguns testes simples. Agora chegou a hora de ir um pouco além e conhecer técnicas mais avançadas.</p>
+
+      <p>Vale lembrar que, em nossos exemplos, utilizamos uma versão modificada da biblioteca, adaptada para jQuery: jasmine-jquery.</p>
+
+      <p>O nosso exemplo vai utilizar os dados de um outro artigo, <a href="http://tableless.com.br/conteudo-sob-demanda-com-jquery/">Conteúdo sob demanda com jQuery</a>. O objetivo é testar as solicitações AJAX do carregamento da lista de tweets do Tableless.</p>
+
       <h3>Fixtures</h3>
+
+      <p>Antes dos testes propriamente ditos vamos conhecer uma forma prática de carregar HTMLs para nossos testes. Fixtures são arquivos html carregados através do método <strong>loadFixtures</strong>.</p>
+
+      <p>Vamos salvar o código HTML abaixo no arquivo <strong>tweets.html</strong>, dentro do diretório de fixtures.</p>
 
 <pre>
 &lt;div id="container">
@@ -25,12 +36,75 @@
 &lt;/div>
 </pre>
 
+      <p>Por padrão, o jasmine-jquery procura as fixtures no diretório <strong>spec/javascripts/fixtures</strong>. Como na primeira parte do artigo indicamos uma estrutura diferente, utilizando o diretório <strong>spec/fixtures</strong>, precisamos atualizar a propriedade fixturesPath nas configurações do Jasmine.</p>
+
+<pre>
+jasmine.getFixtures().fixturesPath = 'spec/fixtures/'; 
+
+describe('Exibição dos últimos tweets do Tableless', function(){
+  beforeEach(function(){
+    loadFixtures('tweets.html');
+  });
+
+  it('Deve carregar na primeira página', function(){
+    expect($('#carrega-tweets').data('pagina')).toEqual(1);
+  });
+});
+</pre>
+
+      <p>Outra forma de utilizarmos fixtures é carregando diretamente no código, sem a necessidade de um arquivo HTML. Esse caso é mais indicado para templates mais simples, com poucos elementos.</p>
+
+<pre>
+setFixtures('&gt;ul id="lista-tweets" />');
+</pre>
+
       <h3>Testando código assíncrono</h3>
+
+      <p>Testar código AJAX pode ser um pouco mais complicado. No nosso exemplo, como acessamos uma URL externa à nossa aplicação, o tempo de resposta vai depender de vários fatores, como velocidade da conexão, estabilidade do Twitter etc.</p>
+
+      <p>Os métodos <strong>runs</strong> e <strong>strong</strong> são úteis para tentar simular esse tempo de carregamento. O <strong>runs</strong> executa os testes e funções um escopo próprio e, além disso, são executados em sequência (quando um termina, o outro começa). Já o método <strong>waits</strong> funciona como uma espécie de pausa/sleep e recebe como parâmetro o tempo em milissegundos.</p>
+
+<pre>
+it('Deve carregar os últimos 20 tweets', function(){
+  runs(function(){
+    Tableless.retorna_tweets(1);
+  });
+  waits(1500);
+  runs(function(){
+    expect($('#lista-tweets li').length).toEqual(20);
+  });
+});
+</pre>
 
       <h3>Espionando métodos</h3>
 
+      <p>Às vezes precisamos testar se um método de um objeto é chamado (e com que parâmetros) &mdash; e não testar apenas seu resultado. O Jasmine oferece a função <strong>spyOn</strong> para capturar e validar essas chamadas. O <strong>spyOn</strong> recebe dois parâmetros: o objeto e o nome do método.</p> 
+
+<pre>
+it('Deve executar função para retornar tweets', function(){
+  spyOn(Tableless, 'retorna_tweets');
+  Tableless.retorna_tweets(1);
+  expect(Tableless.retorna_tweets).toHaveBeenCalledWith(1);
+});
+</pre>
+
+      <p>Acima testamos se o método foi chamado com o parâmetro 1 (página). Poderíamos ter utilizado também <strong>toHaveBeenCalled</strong>, testando apenas a chamada. As funções de spy podem ainda ser combinadas com o not, por exemplo: expect(Tableless.retorna_tweets).not.toHaveBeenCalled().</p>
+
       <h3>Matchers personalizados</h3>
 
+<pre>
+beforeEach(function(){
+  this.addMatchers({
+    toBeATweet: function(){ 
+                  return this.actual.hasClass('tweet'); 
+                }
+  });
+});
+</pre>
+
+<pre>
+expect($('#lista-tweets li:first')).toBeATweet();
+</pre>
       <h3>Referências</h3>
 
       <ul>
